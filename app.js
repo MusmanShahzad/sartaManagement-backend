@@ -12,7 +12,7 @@ const {CreateUser,loginUser} = require('./functions/userFunctions');
 const {addBuilding,addNewOwnerToBuilding} = require('./functions/buildingFunction');
 const {addRoom,addTenantToRoom} = require('./functions/roomFunctions');
 
-let PORT = 8888;
+let PORT = process.env.PORT || 8888;
 const Start=async()=>{
     try{
     await mongoose.connect(
