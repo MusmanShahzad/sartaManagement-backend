@@ -17,6 +17,7 @@
   },
   "devDependencies": {},
   "scripts": {
+    "start" :"node app.js",
     "test": "nodemon run app"
   },
   "author": "",
