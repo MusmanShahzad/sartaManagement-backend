@@ -16,7 +16,7 @@ let PORT = 8888;
 const Start=async()=>{
     try{
     await mongoose.connect(
-        `mongodb://localhost:27017/managementCompany`,
+        `mongodb+srv://test:test@cluster0-00xdi.mongodb.net/test?retryWrites=true&w=majority`,
         {
           useUnifiedTopology: true,
           useNewUrlParser: true,
