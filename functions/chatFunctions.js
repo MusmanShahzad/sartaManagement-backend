@@ -12,7 +12,6 @@ owner.rooms.forEach(ele=>{
    buildings.push(ele.roomId.building);
 });
 
-console.log(owner);
 owner.buildings.forEach(ele=>{
     if(buildings.find(build=>{
         return build==ele.building
@@ -37,7 +36,6 @@ const addChatOwner=async(buildingId,message,url,userId)=>{
     .populate('messageOwner.userId'));
 }
 const addChatAll=async(buildingId,message,url,userId)=>{
-    console.log(buildingId)
     let building=await Building.findById(buildingId);
     if(!building){
         return{error:'not found',message:'building not found'};

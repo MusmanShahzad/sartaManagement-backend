@@ -36,7 +36,6 @@ const CreateUser = async (name, email, password, userType) => {
                     userId:user._id  
                 });
                   temp=(await temp.save());
-                  console.log('tenant saved');
                   break;
               }
               case 2:{

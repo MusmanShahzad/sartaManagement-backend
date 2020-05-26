@@ -168,7 +168,6 @@ module.exports = {
     },
     Mutation: {
         singleUpload: async (parent, args, context) => {
-            console.log(args);
             return null;
         },
         RegisterUser: async (parent, args, context) => {
@@ -418,7 +417,6 @@ module.exports = {
         },
         ApproveRequest:async (parent, args, context) => {
             let Errors = [];
-            console.log(context.type);
             let Data =await approveRequest(args.requestId,context.userId);
             if(Data.error){
                 Errors.push(Data);
@@ -464,7 +462,6 @@ module.exports = {
                 Errors.push(Data);
                 return {Errors, Data:null};
             }
-            console.log('publiching');
             pubsub.publish('ChatOwnerUpdate', {ChatOwnerUpdate:Data});
             return {Errors:null,Data};
         },
@@ -494,7 +491,7 @@ module.exports = {
                 Errors.push( {error:'not authorized',message:'you are not Tenant'});
                 return {Errors, Data:null};
             }
-            console.log(args.complain);
+            
             let Data = await createComplain(context.userId,args.complain);
             if(Data.error){
                 Errors.push(Data);
@@ -506,8 +503,7 @@ module.exports = {
     Subscription: {
         ChatOwnerUpdate: {
           subscribe: withFilter(() => pubsub.asyncIterator('ChatOwnerUpdate'), (payload, variables) => {
-              console.log('here')
-              console.log(payload.ChatOwnerUpdate._id == variables.buildingId)
+              
              return payload.ChatOwnerUpdate._id == variables.buildingId;
           }),
         },

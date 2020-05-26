@@ -172,7 +172,7 @@ const addAgentToBuilding=async(agentId,buildingId)=>{
       })
 }
 const addNewOwnerToBuilding=async(ownerId,buildingId,userId)=>{
-  //console.log(userId,buildingId);
+  
     let building=await getBuildingById(buildingId);
     //checks
     if(!building){

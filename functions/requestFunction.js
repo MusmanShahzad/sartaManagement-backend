@@ -31,7 +31,6 @@ const getRequestForOwner = async(userId) => {
     // let rooms =  owner.rooms.filter((ele) => {
     //     return ele.roomId;
     // });
-    console.log(buildings,rooms);
     let requests=[];
     requests = requests.concat(await Request.find({
                 building: {
@@ -138,7 +137,6 @@ const createRequest = async (userId, building, roomId, notificationType) => {
         let owner = await Owner.findOne({
             userId
         }).populate('userId');
-        //console.log(owner);
         if (!owner) {
             return {
                 error: 'not found',
