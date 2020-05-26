@@ -8,6 +8,13 @@ type user{
     createdDate:String
     status:Boolean
 }
+type message{
+    userId:user
+    messageType:Int
+    message:String
+    url:String
+    date:String
+}
 type request{
     _id:ID
     notification:String
@@ -67,12 +74,7 @@ type owner{
     createdDate:String
     status:Boolean
 }
-type  messages{
-    userId:user
-    messageType:Int
-    message:String
-    url:String
-}
+
 type building{
     _id:ID
     name:String
@@ -81,7 +83,8 @@ type building{
     ownersId:owner
     status:Boolean
     rooms:[rooms]
-    message:[messages]
+    message:[message]
+    messageOwner:[message]
 }
 type Error{
     error:String
@@ -111,6 +114,17 @@ input roomsInput {
     name:String
     address:String
 }
+type complain{
+    complain:String
+    userId:user
+    building:building
+    roomId:room
+    status:Boolean
+}
+type complainOutput{
+    Errors:[Error]
+    Data:complain
+}
 type Mutation{
     singleUpload(file:Upload):String
     ##user mutation
@@ -122,8 +136,21 @@ type Mutation{
     ## building mutation
     AddBuilding(name:String,address:String,rooms:[roomsInput]):addBuildingOutput
     UpdateBuilding(name:String,address:String,rooms:[roomsInput],id:ID):addBuildingOutput
+    RemoveAgent(buildingId:ID):addBuildingOutput
     CreateRequest(building:ID,roomId:String):requestOutput
     ApproveRequest(requestId:ID):requestOutput
+    ##chat mutations
+    AddChatOwner(buildingId:ID,message:String,url:String):addBuildingOutput
+    AddChatAll(buildingId:ID,message:String,url:String):addBuildingOutput
+    ##complains mutations
+    CreateComplain(complain:String):complainOutput
+    UserStatusUpdate(userId:ID):registerOutput
+    BuildingStatusUpdate(buildingId:ID):addBuildingOutput
+    RoomStatusChange(roomId:ID):addRoomOutput
+    }
+    type Subscription{
+        ChatOwnerUpdate(buildingId:ID):building
+        ChatAllUpdate(buildingId:ID):building
     }
 type Query{
     getAllUsers:[user]
@@ -136,10 +163,14 @@ type Query{
     ## Building Queries
     GetAllBuilding:[building]
     GetAllBuildingOfOwner(ownerId:ID):[building]
+    GetAllBuildingOfAgent(ownerId:ID):[building]
     GetBuildingById(buildingId:ID):building
     ## Request Queries
     GetRequestForOwner:[request]
     GetRequestOfUser:[request]
-
+    ##Chat Queries
+    GetViewChats:[building]
+    ##Complain Query
+    GetAllComplaints:[complain]
 }
 `

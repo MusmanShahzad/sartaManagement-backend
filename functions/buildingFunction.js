@@ -90,8 +90,36 @@ const getAllBuildingOfOwner=async(id)=>{
         }
       });
 }
+const getAllBuildingOfAgent=async(id)=>{
+  let agent = await Agent.findOne({userId:id});;
+  return await Building.find({agentId:agent._id}).populate('agentId ownersId tenantId rooms.roomId')
+  .populate({
+      path: "agentId",
+      populate: {
+        path: "userId"
+      }
+    }).populate({
+      path: "ownersId",
+      populate: {
+        path: "userId"
+      }
+    }).populate({
+      path: "tenantId",
+      populate: {
+        path: "userId"
+      }
+    });
+}
+const getAllBuildingOfTenant = async(userId)=>{
+  let tenant = await Tenant.findOne({userId})
+  .populate('roomId');
+  if(!(tenant.roomId)){
+    return [];
+  }
+  return [(await getBuildingById(tenant.roomId.building))];
+}
 const getBuildingById=async(id)=>{
-    return await Building.findById(id).populate('agentId ownersId rooms.roomId')
+    return await Building.findById(id).populate('agentId ownersId rooms.roomId message.userId messageOwner.userId')
     .populate({
         path: "agentId",
         populate: {
@@ -221,5 +249,31 @@ const updateBuilding=async(buildingId,userId,name,address,rooms)=>{
   await building.save();
   return await getBuildingById(building._id);
 }
+const removeAgent= async (buildingId)=>{
+  let building = await Building.findById(buildingId);
+  if(!building){
+    return{error:'not found',message:'building not found'};
+  }
+  if(!building.agentId){
+    return{error:'not found',message:'there is no agent of building'};
+  }
+  let agent = await Agent.findById(building.agentId);
+  if(!agent){
+    return{error:'not found',message:'agent not found'};
+  }
+  
+  await Agent.findByIdAndUpdate(agent._id,{
+    $pull:{
+      buildings:{
+        buildingId: building._id
+      }
+    }
+  });
+  building.agentId=null;
+  return await building.save();
 
-module.exports={addBuilding, getAllBuilding,getAllBuildingOfOwner,getBuildingById,addAgentToBuilding,addNewOwnerToBuilding,updateBuilding};
+}
+
+module.exports={addBuilding, getAllBuilding,getAllBuildingOfOwner,
+  getBuildingById,addAgentToBuilding,
+  addNewOwnerToBuilding,updateBuilding,removeAgent,getAllBuildingOfAgent,getAllBuildingOfTenant};

@@ -9,9 +9,7 @@ const CreateUser = async (name, email, password, userType) => {
     if(await User.findOne({email})!=null){
         return {error:'Duplicate',message:'email already exists'};
     }
-    if(!userType){
-      return {error:'Invalid',message:'invalid user type'};
-    }
+    
     if(userType<0||userType>3){
       return {error:'Invalid',message:'invalid user type'};
     }
@@ -33,12 +31,12 @@ const CreateUser = async (name, email, password, userType) => {
           );
           
           switch(user.userType){
-
               case 1:{
                   let temp = new Tenant({
                     userId:user._id  
                 });
                   temp=(await temp.save());
+                  console.log('tenant saved');
                   break;
               }
               case 2:{

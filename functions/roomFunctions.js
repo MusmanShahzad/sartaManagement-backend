@@ -58,7 +58,17 @@ const getAllRoom = async () => {
 }
 const getRoomByID = async (id) => {
     return Room.findById(id)
-    .populate('building ownersId tenants.tenantsId')
+    .populate('building ownersId tenants.tenantsId').populate({
+        path: "building.ownersId",
+        populate: {
+          path: "userId"
+        },
+    }).populate({
+        path: "building.agentId",
+        populate: {
+          path: "userId"
+        },
+    })
     .populate({
         path: "ownersId",
         populate: {
@@ -74,6 +84,22 @@ const getRoomByID = async (id) => {
 const getRoomOfOwner = async (id) => {
     return await Room.find({
         ownersId: id
+    }).populate('building ownersId tenantId tenants.tenantsId')
+    .populate({
+        path: "ownersId",
+        populate: {
+          path: "userId"
+        },
+    }).populate({
+        path: "tenantId",
+        populate: {
+          path: "userId"
+        },
+    });
+}
+const getRoomOfTenant = async (id) => {
+    return await Room.find({
+        tenantId: id
     }).populate('building ownersId tenantId tenants.tenantsId')
     .populate({
         path: "ownersId",
@@ -131,10 +157,11 @@ const removeTenantFromRoom = async (roomId) => {
     if (!room.tenantId) {
         return{error:'not found',message:'no tenant found to remove'};
     }
+    room.tenantsHistory.push({
+        tenantId: room.tenantId
+    });
         room.tenantId = null;
-        room.tenantsHistory.push({
-            tenantId: tenant._id
-        });
+       
         room = await room.save();
         tenant.roomId = null;
         tenant = await tenant.save();
@@ -173,5 +200,6 @@ module.exports = {
     getRoomOfOwner,
     addTenantToRoom,
     removeTenantFromRoom,
-    changeRoomOwner
+    changeRoomOwner,
+    getRoomOfTenant
 };

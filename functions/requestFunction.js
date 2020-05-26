@@ -46,6 +46,9 @@ const getRequestForOwner = async(userId) => {
             }).populate('userId building roomId'));
             return requests;
 }
+const getAllRequests = async()=>{
+    return await Request.find({});
+}
 const getRequestOfUser = async (userId)=>{
     return await Request.find({userId: userId})
     .populate('userId building roomId');
@@ -53,18 +56,18 @@ const getRequestOfUser = async (userId)=>{
 const createRequest = async (userId, building, roomId, notificationType) => {
     let temp = [];
     if(roomId){
-      temp=  (await Request.find({$or:[
+      temp=  (await Request.find(
             {userId,
-            roomId
-            }
-        ]}));
+            roomId,
+            status:RequestStatus.pending
+            }));
     }
     if(building){
-       temp =  (await Request.find({$or:[
+       temp =  (await Request.find(
             {userId,
-            building
-            }
-        ]}));
+            building,
+            status:RequestStatus.pending
+            }));
     }
     if(temp.length>0) {
         return{error:'duplicate',message:'Request already exists'}
@@ -192,9 +195,9 @@ const createRequest = async (userId, building, roomId, notificationType) => {
         return await Request.create({
                 notificationType,
                 userId,
-                notification: `Agent:${agent.userId.name} have request to become Agent of your Building:${buildingData.name}`
-            },
-            building
+                notification: `Agent:${agent.userId.name} have request to become Agent of your Building:${buildingData.name}`,
+                building },
+            
         );
     } else {
         return {
@@ -212,8 +215,11 @@ const approveRequest = async (requestId,userId)=>{
     }
     if(request.notificationType==NotificationType.tenants){
         let tenant = await Tenant.findOne({
-            userId
+            userId:request.userId
         }).populate('userId');
+        if(!tenant){
+            return{error: 'not found',message: 'tenant not found'}
+        }
         let room = await addTenantToRoom(request.roomId, tenant._id);
         if(room.error){
             return room;
@@ -265,7 +271,7 @@ const approveRequest = async (requestId,userId)=>{
             if(!agent){
                 return{error:'not found',message:'Requesting Agent not found'};
             }
-            let building = await addNewAgentToBuilding(agent._id,request.building);
+            let building = await addAgentToBuilding(agent._id,request.building);
             if(building.error){
                 return building;
             }
@@ -282,5 +288,6 @@ module.exports = {
     createRequest,
     getRequestForOwner,
     getRequestOfUser,
-    approveRequest
+    approveRequest,
+    getAllRequests
 };

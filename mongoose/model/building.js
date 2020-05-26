@@ -18,7 +18,16 @@ message:[
         userId:{type:mongoose.Schema.Types.ObjectId,ref: TableName.userTable},
         messageType:{type:Number},
         message:{type:String},
-        url:{type:String}
+        url:{type:String},
+        date:{type:Date,default: Date.now()},
+}],
+messageOwner:[
+    {
+        userId:{type:mongoose.Schema.Types.ObjectId,ref: TableName.userTable},
+        messageType:{type:Number},
+        message:{type:String},
+        url:{type:String},
+        date:{type:Date,default: Date.now()},
 }],
 status:{type: Boolean,default:true}
 }

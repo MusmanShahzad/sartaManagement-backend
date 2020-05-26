@@ -11,7 +11,7 @@ const {createRequest} = require('./functions/requestFunction');
 const {CreateUser,loginUser} = require('./functions/userFunctions');
 const {addBuilding,addNewOwnerToBuilding} = require('./functions/buildingFunction');
 const {addRoom,addTenantToRoom} = require('./functions/roomFunctions');
-
+const {getBuildingsOwnerChat} = require('./functions/chatFunctions')
 let PORT = process.env.PORT || 8888;
 const Start=async()=>{
     try{
@@ -23,7 +23,7 @@ const Start=async()=>{
           useFindAndModify:false
         });
 //TEST:
-
+// console.log(await getBuildingsOwnerChat('5ecaffec80d1d40ac8f46874'));
          //console.log(await createRequest('5ebd43c1a4934a5730e5aad9',null,'5ebd7fbe272c07421c32ae16',2))
         //console.log(await addRoom('test','address','5ebd57c0c9df762228acff68','5ebd43c1a4934a5730e5aad9'))
         //console.log(await addBuilding('test','hello here near','5ebd43c1a4934a5730e5aad9'))
@@ -63,10 +63,8 @@ const server = new ApolloServer({
     subscriptions: {
         onConnect: async (connectionParams, webSocket, context) => {
           
-            console.log('connect socket')
         },
       onDisconnect: async (webSocket, context) => {
-        console.log('Disconnect Socket');
       },
     },
   });
