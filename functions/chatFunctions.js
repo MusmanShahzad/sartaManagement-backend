@@ -2,7 +2,7 @@ const Owner= require('./../mongoose/model/owner');
 const Room = require('./../mongoose/model/room');
 const Building = require('./../mongoose/model/building');
 const getBuildingsOwnerChat=async(userId)=>{
-let owner = await Owner.findOne({userId}).populate('rooms.roomId buildings');
+let owner = await Owner.findOne({userId}).populate('rooms.roomId');
 if(!owner){
     console.log('no owner found')
     return null;
@@ -11,6 +11,8 @@ let buildings=[];
 owner.rooms.forEach(ele=>{
    buildings.push(ele.roomId.building);
 });
+
+console.log(owner);
 owner.buildings.forEach(ele=>{
     if(buildings.find(build=>{
         return build==ele.building
@@ -18,6 +20,7 @@ owner.buildings.forEach(ele=>{
         buildings.push(ele.building)
     }
 });
+
 return await Building.find({_id:{$in:buildings}});
 }
 const addChatOwner=async(buildingId,message,url,userId)=>{
