@@ -129,7 +129,7 @@ module.exports = {
             if(!context.isAuth){
                 return null;
             }
-            if(context.type== types.tenant){
+            if(context.type== types.tenant||context.type== types.owner){
             return await getRequestOfUser(context.userId);
             }
             if(context.type==types.admin){
