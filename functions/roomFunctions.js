@@ -157,14 +157,20 @@ const removeTenantFromRoom = async (roomId) => {
     if (!room.tenantId) {
         return{error:'not found',message:'no tenant found to remove'};
     }
+    let tenant = await Tenant.findById(room.tenantId);
+    if(!tenant){
+        return {error:'not found',message:'tenant not found'};
+    }
     room.tenantsHistory.push({
         tenantId: room.tenantId
     });
         room.tenantId = null;
        
-        room = await room.save();
+        
+        console.log(tenant.roomId);
         tenant.roomId = null;
         tenant = await tenant.save();
+        room = await room.save();
         return await getRoomByID(room._id);
 
 }

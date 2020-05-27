@@ -28,6 +28,7 @@ const getRequestForOwner = async(userId) => {
     for(let i=0; i<owner.rooms.length; i++) {
         rooms.push(owner.rooms[i].roomId);
     }
+    console.log(rooms)
     // let rooms =  owner.rooms.filter((ele) => {
     //     return ele.roomId;
     // });

@@ -324,6 +324,7 @@ module.exports = {
                     Data: null
                 };
             }
+            console.log(args);
 
             let Data = await updateBuilding(args.id, context.userId, args.name, args.address, args.rooms);
             if (Data.error) {

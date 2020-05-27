@@ -21,6 +21,8 @@ const addBuilding=async(name,address,userId,rooms)=>{
        owner.buildings.push({
           building:building._id
       });
+
+      
       owner =await owner.save();
   }
   else{
@@ -36,7 +38,7 @@ const addBuilding=async(name,address,userId,rooms)=>{
       rooms=[];
       for(let room of roomsSave){
         rooms.push({roomId:room._id});
-      if(owner.rooms){
+      if(owner.rooms&&owner.rooms.length>0){
         owner.rooms.push({roomId:room._id});
       }
       else{
@@ -231,7 +233,7 @@ const updateBuilding=async(buildingId,userId,name,address,rooms)=>{
   }
   building.name=name;
   building.address=address;
-  
+  console.log(rooms);
   if(rooms && rooms.length){
     for(let i = 0; i < rooms.length; i++){
       rooms[i].building=building._id;
