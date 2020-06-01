@@ -31,6 +31,8 @@ const {
   getUsersOfOwner
 } = require('./functions/userFunctions.js');
 const isImage = require('is-image');
+var cors = require('cors')
+
 
 const fs = require("fs");
 const path = require('path');
@@ -104,6 +106,8 @@ const Start = async () => {
       app,
     });
     app.use(express.static(__dirname + '/uploads'));
+    app.use(cors())
+    app.use('/graphql',(cors()))
     const imageExt = ['.jpeg', '.jpg', '.png', '.gif', '.tiff', '.svg', '.jfif', '.fif', '.psd', '.raw', '.indd'];
     const videoExt = ['.mkv', '.webm', '.mpg', '.mp2', '.mpeg', '.mpe', '.mpv', '.ogg', '.mp4', '.m4p', '.m4v', '.avi', '.wmv', '.mov', '.qt', '.flv', '.swf', '.avchd']
     app.get('/uploads/:filename', (req, res) => {
