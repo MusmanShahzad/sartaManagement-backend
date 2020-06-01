@@ -2,17 +2,16 @@ const mongoose = require('mongoose');
 const TableName = require('./tableNames');
 const requestStatus = require('./requestStatus');
 const Schema = mongoose.Schema;
-const request = new Schema({
-    complain:{type:String},
+const notification = new Schema({
+    booking:{type:String},
     userId:{type:mongoose.Schema.Types.ObjectId,
         ref:TableName.userTable
     },
-    url:{type:String},
+    type:{type:String},
     building:{type:mongoose.Schema.Types.ObjectId,ref:TableName.buildingTable},
-    roomId:{type:mongoose.Schema.Types.ObjectId,ref:TableName.roomTable},
-    createdAt:{type:Date,default:Date.now()},
-    status:{type:Number,default:requestStatus.pending}
+    date:{type:Date},
+    status:{type:Number,default:requestStatus.pending},
 }, {
     timestamps: true
 });
-module.exports = mongoose.model('complain', request);
+module.exports = mongoose.model('booking', notification);

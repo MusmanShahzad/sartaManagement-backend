@@ -53,7 +53,8 @@ const getRequestOfUser = async (userId)=>{
     return await Request.find({userId: userId})
     .populate('userId building roomId');
 }
-const createRequest = async (userId, building, roomId, notificationType) => {
+const createRequest = async (userId, building, roomId, notificationType,url) => {
+    console.log(url);
     let temp = [];
     if(roomId){
       temp=  (await Request.find(
@@ -101,7 +102,8 @@ const createRequest = async (userId, building, roomId, notificationType) => {
             notificationType,
             userId,
             notification: `Tenant:${tenant.userId.name} have request to be tenant of your room:${room.name}`,
-            roomId
+            roomId,
+            url
         });
     } else if (notificationType == NotificationType.owner && roomId) {
         let owner = await Owner.findOne({

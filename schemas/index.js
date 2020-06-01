@@ -86,6 +86,15 @@ type building{
     message:[message]
     messageOwner:[message]
 }
+type booking{
+    _id:ID
+    booking:String
+    userId:user
+    type:String
+    building:building
+    date:String
+    status:Int
+}
 type Error{
     error:String
     message:String
@@ -115,15 +124,36 @@ input roomsInput {
     address:String
 }
 type complain{
+    _id:ID
     complain:String
     userId:user
     building:building
+    url:String
     roomId:room
-    status:Boolean
+    status:Int
 }
 type complainOutput{
     Errors:[Error]
     Data:complain
+}
+type bookingOutput{
+    Errors:[Error]
+    Data:booking
+}
+type contractors{
+    _id:ID
+    userId:user
+    name:String
+    email:String
+    phoneNo:String
+    type:String
+    price:Int
+}
+type notification{
+    notification:String
+    url:String
+    userId:user
+    date:String
 }
 type Mutation{
     singleUpload(file:Upload):String
@@ -140,13 +170,23 @@ type Mutation{
     CreateRequest(building:ID,roomId:String):requestOutput
     ApproveRequest(requestId:ID):requestOutput
     ##chat mutations
-    AddChatOwner(buildingId:ID,message:String,url:String):addBuildingOutput
-    AddChatAll(buildingId:ID,message:String,url:String):addBuildingOutput
+    AddChatOwner(buildingId:ID,message:String,file:Upload):addBuildingOutput
+    AddChatAll(buildingId:ID,message:String,file:Upload):addBuildingOutput
     ##complains mutations
-    CreateComplain(complain:String):complainOutput
+    CreateComplain(complain:String,file:Upload):complainOutput
+    AcceptComplain(complainId:ID):complainOutput
+    RejectComplain(complainId:ID):complainOutput
+    ##status blocking 
     UserStatusUpdate(userId:ID):registerOutput
     BuildingStatusUpdate(buildingId:ID):addBuildingOutput
     RoomStatusChange(roomId:ID):addRoomOutput
+    ##booking mutation
+    AddBooking(date:String,type:String,booking:String):bookingOutput
+    BookingStatusAccept(bookingId:ID):bookingOutput
+    BookingStatusReject(bookingId:ID):bookingOutput
+    CreateContractor(name:String,email:String,phoneNo:String,type:String,price:Int):contractors
+    DeleteContractor(id:ID):contractors
+    CreateNotification(notification:String,file:Upload,userIds:[ID]):[notification]
     }
     type Subscription{
         ChatOwnerUpdate(buildingId:ID):building
@@ -156,6 +196,7 @@ type Query{
     getAllUsers:[user]
     getUserById(id:ID):user
     getUser:user
+    GetUsersOfOwner:[user]
     ## Room Queries
     GetAllRooms:[room]
     GetRoomById(roomId:ID):room
@@ -172,5 +213,13 @@ type Query{
     GetViewChats:[building]
     ##Complain Query
     GetAllComplaints:[complain]
+    GetAllComplaintsOfOwner:[complain]
+    ## Booking Queries
+    GetAllBookingsOfUser:[booking]
+    ## Contractors Queries
+    GetAllContractors:[contractors]
+    ##notification queries
+    GetAllNotificationsOfUser:[notification]
+    
 }
 `
