@@ -830,8 +830,8 @@ module.exports = {
                 //return { data:null, error: null };
             } catch (error) {
                 return {
-                    data: null,
-                    error: error.message
+                    Data: null,
+                    Errors: {message:error.message,error:JSON.stringify(error)}
                 };
             }
 
