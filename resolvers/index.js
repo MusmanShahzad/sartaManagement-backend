@@ -635,7 +635,7 @@ module.exports = {
                         createReadStream()
                         .pipe(
                             createWriteStream(
-                                path.join( "./../uploads", _filename)
+                                path.join(__dirname+ "./../uploads", _filename)
                             )
                         )
                         .on("close", res)
@@ -807,7 +807,7 @@ module.exports = {
                     createReadStream()
                     .pipe(
                         createWriteStream(
-                            path.join( "./../uploads", _filename)
+                            path.join( __dirname+"./../uploads", _filename)
                         )
                     )
                     .on("close", res)
@@ -963,7 +963,7 @@ module.exports = {
                         createReadStream()
                         .pipe(
                             createWriteStream(
-                                path.join( "./../uploads", _filename)
+                                path.join(__dirname+ "./../uploads", _filename)
                             )
                         )
                         .on("close", res)
