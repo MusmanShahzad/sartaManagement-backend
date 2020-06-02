@@ -950,6 +950,7 @@ module.exports = {
 
             if (args.file) {
                 try {
+                    console.log('uploading...');
                     const {
                         createReadStream,
                         filename,
@@ -967,6 +968,7 @@ module.exports = {
                         )
                         .on("close", res)
                     );
+                    console.log('uploaded...');
                     let notifications = [];
                     args.userIds.forEach(ele => {
                         notifications.push(new Notification({
