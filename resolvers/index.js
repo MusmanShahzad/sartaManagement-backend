@@ -985,7 +985,6 @@ module.exports = {
                 args.userIds.forEach(ele => {
                     notifications.push(new Notification({
                         notification: args.notification,
-                        url: (server + "uploads/" + _filename),
                         userId: ele
                     }));
                 });
