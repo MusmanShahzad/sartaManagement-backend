@@ -829,19 +829,20 @@ module.exports = {
         };
       }
       try {
+        console.log(args.file);
         const { createReadStream, filename, mimetype, encoding } =
           await args.file;
         _filename = Math.random() * (9999999 - 1) + 1 + "-" + filename;
-        await new Promise((res) =>
-          createReadStream()
-            .pipe(
-              createWriteStream(
-                path.join(__dirname + "./../uploads", _filename)
-              )
-            )
-            .on("close", res)
-        );
-        // console.log(path.join(__dirname, "./../uploads", _filename))
+        // await new Promise((res) =>
+        //   createReadStream()
+        //     .pipe(
+        //       createWriteStream(
+        //         path.join(__dirname + "./../uploads", _filename)
+        //       )
+        //     )
+        //     .on("close", res)
+        // );
+        console.log(path.join(__dirname, "./../uploads", _filename));
         let Data = await createComplain(
           context.userId,
           args.complain,
