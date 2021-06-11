@@ -24,6 +24,9 @@
     "start": "node app.js",
     "test": "nodemon run app"
   },
+  "engines": {
+    "node": ">=8.0.0 <11.0.0"
+  },
   "author": "",
   "license": "ISC"
 }
